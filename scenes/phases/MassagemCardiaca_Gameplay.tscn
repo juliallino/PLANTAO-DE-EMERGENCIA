@@ -1,45 +1,47 @@
-[gd_scene format=3 uid="uid://c6j6dy1set3a6"]
+[gd_scene load_steps=10 format=3 uid="uid://c6j6dy1set3a6"]
 
-[ext_resource type="Script" uid="uid://cebc2jvpreact" path="res://scripts/phases/MassagemCardiaca_Gameplay.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://b7h7fad6xma0m" path="res://massagem_cardiaca_1.png" id="2_bg"]
-
+[ext_resource type="Script" path="res://scripts/phases/MassagemCardiaca_Gameplay.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/graphics/ui/massagem_cardiaca_1.png" id="2_bg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_monitor"]
-bg_color = Color(0, 0, 0, 0.8)
+bg_color = Color(0, 0.05, 0.05, 0.8)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0, 1, 0, 0.5)
+border_color = Color(0, 1, 1, 0.3)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
-bg_color = Color(0.1, 0.1, 0.1, 1)
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(1, 0.2, 0.2, 1)
+bg_color = Color(0, 1, 1, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+shadow_color = Color(0, 1, 1, 0.3)
+shadow_size = 8
 
 [sub_resource type="Environment" id="Environment_cpr"]
 background_mode = 3
 glow_enabled = true
-glow_intensity = 0.6
-glow_strength = 1.1
-glow_bloom = 0.1
+glow_intensity = 0.8
+glow_strength = 1.0
+glow_bloom = 0.2
+glow_blend_mode = 0
 
 [sub_resource type="Animation" id="Animation_ecg"]
 resource_name = "ecg_pulse"
-length = 0.6
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -47,10 +49,10 @@ tracks/0/path = NodePath("Line2D:points")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [PackedVector2Array(0, 0, 50, 0, 100, 0, 150, 0, 200, 0, 250, 0), PackedVector2Array(0, 0, 50, 0, 70, -30, 90, 40, 110, 0, 250, 0), PackedVector2Array(0, 0, 100, 0, 120, -30, 140, 40, 160, 0, 250, 0), PackedVector2Array(0, 0, 150, 0, 170, -30, 190, 40, 210, 0, 250, 0), PackedVector2Array(0, 0, 200, 0, 220, -30, 240, 40, 250, 0, 250, 0), PackedVector2Array(0, 0, 50, 0, 100, 0, 150, 0, 200, 0, 250, 0)]
+"values": [PackedVector2Array(0, 0, 50, 0, 100, 0, 150, 0, 200, 0, 250, 0), PackedVector2Array(0, 0, 50, 0, 70, -40, 90, 40, 110, 0, 250, 0), PackedVector2Array(0, 0, 100, 0, 120, -40, 140, 40, 160, 0, 250, 0), PackedVector2Array(0, 0, 50, 0, 100, 0, 150, 0, 200, 0, 250, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_monitor"]
@@ -58,23 +60,20 @@ _data = {
 "ecg_pulse": SubResource("Animation_ecg")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_chest"]
-radius = 180.0
-
 [sub_resource type="Animation" id="Animation_fail"]
 resource_name = "screen_darken"
-length = 0.5
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UILayer/DarkOverlay:color")
+tracks/0/path = NodePath("UILayer/FlashOverlay:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.784314)]
+"values": [Color(1, 0, 0, 0), Color(0.8, 0, 0, 0.3), Color(1, 0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fx"]
@@ -95,11 +94,8 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="RhythmCircles" type="Node2D" parent="."]
 position = Vector2(960, 600)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-shape = SubResource("CircleShape2D_chest")
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
@@ -116,8 +112,9 @@ offset_left = 15.0
 offset_top = 10.0
 offset_right = 200.0
 offset_bottom = 36.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "ECG MONITOR - SAMU"
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "SISTEMA DE MONITORAMENTO"
 
 [node name="BPMValue" type="Label" parent="UILayer/Monitor"]
 layout_mode = 0
@@ -125,9 +122,9 @@ offset_left = 200.0
 offset_top = 40.0
 offset_right = 330.0
 offset_bottom = 110.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_color = Color(0, 1, 1, 1)
 theme_override_font_sizes/font_size = 52
-text = "0"
+text = "110"
 horizontal_alignment = 2
 
 [node name="BPMLabel" type="Label" parent="UILayer/Monitor"]
@@ -136,15 +133,15 @@ offset_left = 260.0
 offset_top = 100.0
 offset_right = 330.0
 offset_bottom = 126.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_color = Color(0, 1, 1, 1)
 text = "BPM"
 horizontal_alignment = 2
 
 [node name="Line2D" type="Line2D" parent="UILayer/Monitor"]
-position = Vector2(20, 100)
+position = Vector2(20, 110)
 points = PackedVector2Array(0, 0, 50, 0, 100, 0, 150, 0, 200, 0, 250, 0)
 width = 3.0
-default_color = Color(0, 1, 0, 1)
+default_color = Color(0, 1, 1, 1)
 
 [node name="MonitorAnim" type="AnimationPlayer" parent="UILayer/Monitor"]
 libraries = {
@@ -158,14 +155,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -300.0
-offset_top = -250.0
+offset_top = 180.0
 offset_right = 300.0
-offset_bottom = -150.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 64
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -178,7 +175,7 @@ anchor_bottom = 1.0
 offset_left = -400.0
 offset_top = -100.0
 offset_right = 400.0
-offset_bottom = -70.0
+offset_bottom = -75.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
@@ -191,11 +188,13 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -100.0
+offset_left = -150.0
 offset_top = -30.0
-offset_right = 100.0
+offset_right = 150.0
 offset_bottom = -4.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0.8, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
 text = "ESTABILIZAÇÃO CARDÍACA"
 horizontal_alignment = 1
 
@@ -208,19 +207,63 @@ offset_top = 50.0
 offset_right = -50.0
 offset_bottom = 90.0
 grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 24
 text = "FALHAS: 0 / 5"
 horizontal_alignment = 2
 
-[node name="DarkOverlay" type="ColorRect" parent="UILayer"]
+[node name="DefeatOverlay" type="ColorRect" parent="UILayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.862745)
+
+[node name="Message" type="Label" parent="UILayer/DefeatOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -50.0
+offset_right = 400.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 48
+text = "NÃO DESISTA!"
+horizontal_alignment = 1
+
+[node name="SubMessage" type="Label" parent="UILayer/DefeatOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "A vida do paciente depende de você.
+Mantenha o ritmo das compressões."
+horizontal_alignment = 1
+
+[node name="FlashOverlay" type="ColorRect" parent="UILayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0)
+color = Color(1, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_cpr")

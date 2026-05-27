@@ -44,13 +44,23 @@ func close() -> void:
 	get_tree().paused = false
 	visible = false
 
+func force_close() -> void:
+	# Limpeza instantânea sem animações para trocas de cena
+	AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, false)
+	get_tree().paused = false
+	visible = false
+	
+	# Garantir que todos os componentes visuais estão resetados
+	if blur_rect:
+		blur_rect.modulate.a = 0
+	if menu_container:
+		menu_container.modulate.a = 0
+		menu_container.scale = Vector2(0.9, 0.9)
+	
+	print("[PauseMenu] UI de pause encerrada forçadamente e limpa.")
+
 func _on_continue_pressed() -> void:
 	close()
 
 func _on_menu_pressed() -> void:
-	# Restaurar áudio antes de sair
-	AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, false)
-	get_tree().paused = false
-	
-	# Fade escuro e voltar ao menu via TransitionManager
-	EventBus.transition_started.emit("res://scenes/ui/MainMenu.tscn")
+	UIManager.return_to_main_menu()

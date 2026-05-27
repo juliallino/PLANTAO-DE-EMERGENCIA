@@ -145,54 +145,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "?"
 
-[node name="MedicalReport" type="Panel" parent="UIIayer/MainContainer" unique_id=585874588]
-modulate = Color(1, 1, 1, 0.8)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -350.0
-offset_top = 50.0
-offset_right = -50.0
-offset_bottom = 350.0
-grow_horizontal = 0
-
-[node name="Label" type="Label" parent="UIIayer/MainContainer/MedicalReport" unique_id=732519724]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -100.0
-offset_top = 10.0
-offset_right = 100.0
-offset_bottom = 40.0
-grow_horizontal = 2
-text = "PRONTUÁRIO"
-horizontal_alignment = 1
-
-[node name="StatsList" type="VBoxContainer" parent="UIIayer/MainContainer/MedicalReport" unique_id=1909514499]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 50.0
-offset_right = -20.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Asfixia" type="HBoxContainer" parent="UIIayer/MainContainer/MedicalReport/StatsList" unique_id=180920676]
-layout_mode = 2
-
-[node name="Name" type="Label" parent="UIIayer/MainContainer/MedicalReport/StatsList/Asfixia" unique_id=1153575925]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Asfixia"
-
-[node name="Status" type="Label" parent="UIIayer/MainContainer/MedicalReport/StatsList/Asfixia" unique_id=388121950]
-layout_mode = 2
-text = "BLOQUEADO"
+[node name="Logo" type="TextureRect" parent="UIIayer/MainContainer" unique_id=141129994]
+layout_mode = 0
 
 [node name="InfoPopup" type="AcceptDialog" parent="UIIayer" unique_id=208961433]
 title = "Sobre o Jogo"

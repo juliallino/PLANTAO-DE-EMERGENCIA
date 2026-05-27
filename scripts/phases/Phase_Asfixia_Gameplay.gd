@@ -16,12 +16,8 @@ var draw_start_time: float = 0.0
 var success_count: int = 0
 var required_success: int = 5
 var error_count: int = 0
-var max_errors: int = 3
-
-# Limites para detecção do gesto "J"
-# O "J" deve começar descendo (y aumenta), depois curvar para a esquerda (x diminui) e subir (y diminui)
-# Simplificando: Detecção de 3 estágios
-enum GestureState { START, DOWN, CURVE, UP }
+var max_errors: int = 5
+var is_phase_over: bool = false
 
 func _ready() -> void:
 	EventBus.phase_started.emit("asfixia")
@@ -50,7 +46,6 @@ func _start_drawing(pos: Vector2) -> void:
 func _add_point(pos: Vector2) -> void:
 	points.append(pos)
 	player_trail.points = points
-	# Limitar número de pontos para performance
 	if points.size() > 50:
 		points.remove_at(0)
 
@@ -63,7 +58,6 @@ func _stop_drawing() -> void:
 	
 	_handle_result(result)
 	
-	# Limpar rastro com fade
 	var tween = create_tween()
 	tween.tween_property(player_trail, "modulate:a", 0.0, 0.3)
 	tween.finished.connect(func(): 
@@ -73,35 +67,29 @@ func _stop_drawing() -> void:
 
 func _analyze_gesture(gesture_points: PackedVector2Array, duration: float) -> String:
 	if gesture_points.size() < 10: return "INVALID"
-	if duration > 1.5: return "TOO_SLOW"
+	
+	if duration > 1.2: 
+		return "TOO_SLOW"
 	
 	var start = gesture_points[0]
 	var end = gesture_points[gesture_points.size() - 1]
 	
 	# Analisar a forma básica do "J"
-	# 1. Movimento descendente significativo
 	var max_y = start.y
 	var found_down = false
 	for p in gesture_points:
-		if p.y > max_y + 100:
+		if p.y > max_y + 80:
 			found_down = true
 			break
 			
-	# 2. Curva para a esquerda no final
 	var found_left = false
 	for p in gesture_points:
 		if found_down and p.x < start.x - 30:
 			found_left = true
 			break
 			
-	# 3. Finaliza subindo ou estabilizando
-	var found_up = end.y < gesture_points[gesture_points.size() - 5].y
-	
 	if found_down and found_left:
-		if duration < 0.8:
-			return "CORRECT"
-		else:
-			return "TOO_SLOW"
+		return "CORRECT"
 			
 	return "RETRY"
 
@@ -110,17 +98,19 @@ func _handle_result(result: String) -> void:
 		"CORRECT":
 			_on_success()
 		"TOO_SLOW":
-			_show_feedback("MUITO LENTO", Color.YELLOW)
+			_show_feedback("MUITO LENTO", Color.ORANGE)
+			_on_error()
 		"RETRY":
-			_show_feedback("TENTE NOVAMENTE", Color.ORANGE)
+			_show_feedback("MOVIMENTO INCORRETO", Color.ORANGE)
 			_on_error()
 		"INVALID":
-			pass
+			_show_feedback("TENTE NOVAMENTE", Color.YELLOW)
+			_on_error()
 
 func _on_success() -> void:
 	success_count += 1
 	progress_bar.value = success_count
-	_show_feedback("CORRETO!", Color.GREEN)
+	_show_feedback("CORRETO!", Color.CYAN)
 	_apply_effects()
 	
 	if success_count >= required_success:
@@ -128,14 +118,24 @@ func _on_success() -> void:
 
 func _on_error() -> void:
 	error_count += 1
+	EventBus.error_reported.emit()
 	_update_error_ui()
-	_shake_camera(10.0)
+	_shake_camera(15.0)
+	
+	EventBus.sfx_played.emit("res://assets/audio/sfx/monitor_error.wav")
+	
+	# Diminuir progresso levemente
+	success_count = max(0, success_count - 1)
+	progress_bar.value = success_count
 	
 	if error_count >= max_errors:
 		_lose_game()
 
 func _update_error_ui() -> void:
 	error_counter_label.text = "ERROS: %d / %d" % [error_count, max_errors]
+	if error_count >= max_errors - 1:
+		error_counter_label.modulate = Color.RED
+		_show_feedback("PACIENTE PIORANDO!", Color.DARK_RED)
 
 func _show_feedback(text: String, color: Color) -> void:
 	feedback_label.text = text
@@ -168,20 +168,38 @@ func _shake_camera(intensity: float) -> void:
 	tween.tween_property(camera, "offset", Vector2.ZERO, 0.03)
 
 func _lose_game() -> void:
+	if is_phase_over: return
+	is_phase_over = true
+	EventBus.phase_completed.emit("asfixia", false)
 	defeat_overlay.show()
 	defeat_overlay.modulate.a = 0
+	
+	var messages = [
+		"O paciente ainda precisa de ajuda.",
+		"Vamos tentar novamente.",
+		"Precisamos agir mais rápido.",
+		"Não desista do paciente."
+	]
+	var msg_label = defeat_overlay.get_node_or_null("Message")
+	if msg_label:
+		msg_label.text = messages.pick_random()
+	
 	var tween = create_tween()
-	tween.tween_property(defeat_overlay, "modulate:a", 1.0, 1.0)
+	tween.tween_property(defeat_overlay, "modulate:a", 1.0, 1.5)
+	
 	await tween.finished
 	await get_tree().create_timer(3.0).timeout
 	# Voltar para a intro
 	EventBus.transition_started.emit("res://scenes/phases/Asfixia_Intro.tscn")
 
 func _win_game() -> void:
+	if is_phase_over: return
+	is_phase_over = true
 	feedback_label.text = "PACIENTE SALVO!"
 	feedback_label.modulate = Color.CYAN
 	feedback_label.modulate.a = 1.0
 	
+	EventBus.phase_completed.emit("asfixia", true)
 	SaveManager.game_data["completed_phases"].append("asfixia")
 	SaveManager.save_game()
 	

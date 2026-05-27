@@ -45,6 +45,26 @@ func open_pause_menu() -> void:
 	if pause_menu_instance:
 		pause_menu_instance.open()
 
+func close_pause_menu() -> void:
+	if pause_menu_instance:
+		pause_menu_instance.force_close()
+
+func return_to_main_menu() -> void:
+	print("[UIManager] Iniciando retorno limpo ao menu principal.")
+	
+	# 1. Fechar menu de pause e despausar árvore
+	close_pause_menu()
+	get_tree().paused = false
+	
+	# 2. Esconder botão de pause
+	toggle_pause_button(false)
+	
+	# 3. Resetar estado no GameManager
+	GameManager.set_state(GameManager.GameState.MENU)
+	
+	# 4. Disparar transição
+	EventBus.transition_started.emit("res://scenes/ui/MainMenu.tscn")
+
 func toggle_pause_button(is_visible: bool) -> void:
 	if pause_button:
 		pause_button.visible = is_visible
@@ -55,3 +75,5 @@ func toggle_pause_button(is_visible: bool) -> void:
 				pause_button.get_node("AnimationPlayer").play("idle")
 		else:
 			pause_button.hide()
+			# Se o botão de pause sumir, e o menu estiver aberto, talvez queiramos fechar o menu?
+			# Depende se é transição. GameManager cuida disso.

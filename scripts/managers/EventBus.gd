@@ -18,6 +18,7 @@ signal dialogue_started(dialogue_id: String)
 signal dialogue_finished
 
 # Feedback e UI
+signal error_reported
 signal notification_triggered(message: String, type: String)
 signal score_updated(new_score: int)
 

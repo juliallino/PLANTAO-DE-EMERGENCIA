@@ -172,7 +172,7 @@ offset_right = 250.0
 offset_bottom = 90.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
-text = "ERROS: 0 / 3"
+text = "ERROS: 0 / 5"
 
 [node name="DefeatOverlay" type="ColorRect" parent="UILayer" unique_id=700796907]
 visible = false
@@ -183,7 +183,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.862745)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/DefeatOverlay" unique_id=459001856]
+[node name="Message" type="Label" parent="UILayer/DefeatOverlay" unique_id=29927991]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -191,21 +191,28 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -400.0
-offset_top = -100.0
+offset_top = -50.0
 offset_right = 400.0
-offset_bottom = 100.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
-
-[node name="Message" type="Label" parent="UILayer/DefeatOverlay/VBoxContainer" unique_id=29927991]
-layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "NÃO DESISTA!"
 horizontal_alignment = 1
 
-[node name="SubMessage" type="Label" parent="UILayer/DefeatOverlay/VBoxContainer" unique_id=359059967]
-layout_mode = 2
+[node name="SubMessage" type="Label" parent="UILayer/DefeatOverlay" unique_id=359059967]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 24
 text = "Cada segundo conta para salvar uma vida.
 Tente novamente com mais precisão."
