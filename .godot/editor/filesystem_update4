@@ -2,3 +2,10 @@ res://scenes/ui/PauseMenu.tscn
 res://scripts/ui/FinalPlantao.gd
 res://scripts/ui/MainMenu.gd
 res://scripts/ui/PauseMenu.gd
+res://scripts/phases/Asfixia_Intro.gd
+res://scenes/ui/AsfixiaBriefing.tscn
+res://scripts/phases/ParadaCardiaca_Intro.gd
+res://scenes/ui/MassagemCardiacaBriefing.tscn
+res://scripts/phases/Hemorragia_Intro.gd
+res://scenes/ui/HemorragiaBriefing.tscn
+res://scenes/ui/DesfibriladorBriefing.tscn

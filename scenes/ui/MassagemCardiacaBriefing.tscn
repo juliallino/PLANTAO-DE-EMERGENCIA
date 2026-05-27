@@ -1,0 +1,236 @@
+[gd_scene format=3 uid="uid://cgt4la4dhk6i3"]
+
+[ext_resource type="Script" uid="uid://c8ntnrrq82ivv" path="res://scripts/ui/MassagemCardiacaBriefing.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://b8x8x8x8x8x8x" path="res://themes/main_theme.tres" id="2_theme"]
+
+[sub_resource type="Shader" id="Shader_blur"]
+code = "shader_type canvas_item;
+uniform float blur_amount : hint_range(0.0, 5.0) = 2.5;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+void fragment() {
+    COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, blur_amount);
+    COLOR.rgb *= 0.4;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = SubResource("Shader_blur")
+shader_parameter/blur_amount = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tablet"]
+bg_color = Color(0.05, 0.07, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 40
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.2, 0.2, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(1, 0, 0, 0.1)
+shadow_size = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.95, 0.95, 0.95, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.2, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Animation" id="Animation_fadein"]
+resource_name = "fade_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tablet:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fadeout"]
+resource_name = "fade_out"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_glow"]
+resource_name = "glow"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tablet:theme_override_styles/panel:border_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0.2, 0.2, 0.6), Color(0, 0.8, 1, 0.6), Color(1, 0.2, 0.2, 0.6)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_briefing"]
+_data = {
+&"fade_in": SubResource("Animation_fadein"),
+&"fade_out": SubResource("Animation_fadeout"),
+&"glow": SubResource("Animation_glow")
+}
+
+[node name="MassagemCardiacaBriefing" type="Control" unique_id=2066375500]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Blur" type="ColorRect" parent="." unique_id=1102617754]
+material = SubResource("ShaderMaterial_blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tablet" type="Panel" parent="." unique_id=726172702]
+custom_minimum_size = Vector2(700, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -250.0
+offset_right = 350.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(350, 250)
+theme_override_styles/panel = SubResource("StyleBoxFlat_tablet")
+
+[node name="Grid" type="ColorRect" parent="Tablet" unique_id=224396973]
+modulate = Color(1, 1, 1, 0.05)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Header" type="Control" parent="Tablet" unique_id=1740746453]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tablet" unique_id=901100388]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = -40.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Tablet/VBoxContainer" unique_id=1154630625]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "RESSUSCITAÇÃO CARDIOPULMONAR (RCP)"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Tablet/VBoxContainer" unique_id=1261675435]
+layout_mode = 2
+
+[node name="ContentLabel" type="RichTextLabel" parent="Tablet/VBoxContainer" unique_id=466192521]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "Quando o coração para de bater corretamente, a massagem cardíaca ajuda a manter a circulação do sangue para os órgãos vitais até que a ajuda avançada chegue.
+
+No jogo, você deve seguir o [color=#ff3333][b]ritmo[/b][/color] indicado para garantir que as compressões sejam eficazes e mantenham o fluxo sanguíneo."
+
+[node name="ExtraLabel" type="Label" parent="Tablet/VBoxContainer" unique_id=1672505046]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "“O ritmo pode salvar vidas.”"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="Tablet/VBoxContainer" unique_id=870168531]
+custom_minimum_size = Vector2(350, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.2, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.4, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "INICIAR PROCEDIMENTO"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=675228616]
+libraries/ = SubResource("AnimationLibrary_briefing")
+autoplay = &"glow"
+
+[connection signal="pressed" from="Tablet/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

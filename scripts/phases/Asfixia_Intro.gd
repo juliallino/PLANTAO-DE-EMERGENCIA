@@ -4,6 +4,8 @@ extends Control
 @onready var dialogue_speaker = $UILayer/DialogueBox/Speaker
 @onready var anim_player = $AnimationPlayer
 
+var briefing_scene = preload("res://scenes/ui/AsfixiaBriefing.tscn")
+
 func _ready() -> void:
 	EventBus.intro_started.emit("asfixia")
 	# Iniciar efeitos sonoros
@@ -23,5 +25,11 @@ func _type_text(full_text: String) -> void:
 		await get_tree().create_timer(0.03).timeout
 
 func _start_mission() -> void:
+	print("[Asfixia_Intro] Mostrando briefing médico.")
+	var briefing = briefing_scene.instantiate()
+	add_child(briefing)
+	briefing.briefing_completed.connect(_on_briefing_completed)
+
+func _on_briefing_completed() -> void:
 	print("Transição para Gameplay: Asfixia")
 	EventBus.transition_started.emit("res://scenes/phases/Phase_Asfixia_Gameplay.tscn")
