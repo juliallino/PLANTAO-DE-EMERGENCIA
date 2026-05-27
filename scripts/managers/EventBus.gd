@@ -4,6 +4,7 @@ extends Node
 
 # Transições e Fluxo
 signal transition_started(scene_path: String)
+signal cinematic_transition_requested(scene_path: String)
 signal transition_finished
 
 # Jogo e Fases

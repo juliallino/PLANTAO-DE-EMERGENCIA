@@ -114,7 +114,7 @@ func _win_phase() -> void:
 	feedback_label.modulate.a = 1.0
 	
 	await get_tree().create_timer(2.0).timeout
-	EventBus.transition_started.emit("res://scenes/phases/Hemorragia_Intro.tscn")
+	EventBus.cinematic_transition_requested.emit("res://scenes/phases/Hemorragia_Intro.tscn")
 
 func _lose_phase() -> void:
 	print("Derrota por falhas excessivas.")

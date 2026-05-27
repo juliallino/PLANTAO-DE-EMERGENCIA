@@ -1,9 +1,9 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1779806466
+::res://::1779841113
 GEMINI.md::TextFile::-1::1779802713::0::1::::<><><>0<>0<><>::
 ::res://assets/::1779806412
 ::res://assets/graphics/::1779806412
-::res://assets/graphics/ui/::1779806466
+::res://assets/graphics/ui/::1779806663
 chegando_para_emergencia_0.png::CompressedTexture2D::5832250755778848103::1779772877::1779806662::1::::<><><>0<>0<>0d9334897fe6ca371d03636232691e30<>res://.godot/imported/chegando_para_emergencia_0.png-d0f1ed52566d144d24e8cca287a5b6b5.ctex::
 chegando_para_emergencia_1.png::CompressedTexture2D::3035940497058808896::1779773488::1779806662::1::::<><><>0<>0<>8c71a825bbee1e0e39a79be856e9be03<>res://.godot/imported/chegando_para_emergencia_1.png-65c0db3e4972f376e75a627b00eab17d.ctex::
 chegando_para_emergencia_2.png::CompressedTexture2D::4110907439234148783::1779773931::1779806662::1::::<><><>0<>0<>1a81fd44bc3c0fafe9be99cbd2738085<>res://.godot/imported/chegando_para_emergencia_2.png-c62ec084e046e25936f2a4f9482248d9.ctex::
@@ -42,9 +42,9 @@ PhaseManager.gd::GDScript::6683784782337637715::1779802682::0::1::::<>Node<><>0<
 SaveManager.gd::GDScript::7002604988200289799::1779802664::0::1::::<>Node<><>0<>0<><>::
 TransitionManager.gd::GDScript::4067666060063257663::1779803655::0::1::::<>CanvasLayer<><>0<>0<><>::
 UIManager.gd::GDScript::6127041358165940084::1779802685::0::1::::<>CanvasLayer<><>0<>0<><>::
-::res://scripts/phases/::1779803440
+::res://scripts/phases/::1779806668
 Asfixia_Intro.gd::GDScript::7100212334852330191::1779803056::0::1::::<>Control<><>0<>0<><>::
-Desfibrilador_Gameplay.gd::GDScript::5103515840088996480::1779803375::0::1::::<>Node2D<><>0<>0<><>::
+Desfibrilador_Gameplay.gd::GDScript::5103515840088996480::1779806668::0::1::::<>Node2D<><>0<>0<><>::
 Desfibrilador_Intro.gd::GDScript::4231669345383737860::1779803347::0::1::::<>Control<><>0<>0<><>::
 Hemorragia_Gameplay.gd::GDScript::2503089442664337069::1779803316::0::1::::<>Node2D<><>0<>0<><>::
 Hemorragia_Intro.gd::GDScript::5636501981250501001::1779803290::0::1::::<>Control<><>0<>0<><>::

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c1x1x1x1x1x1x"]
 
 [ext_resource type="Script" uid="uid://fkxpfdbcb3if" path="res://scripts/ui/MainMenu.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://b7ml86hwaa6ap" path="res://tela_ambulância.png" id="3_iwbf0"]
+[ext_resource type="Texture2D" uid="uid://dquq0bsot8xpb" path="res://assets/graphics/ui/tela_menu_jogo_samu.png" id="3_iwbf0"]
 [ext_resource type="Theme" uid="uid://b8x8x8x8x8x8x" path="res://themes/main_theme.tres" id="3_theme"]
 
 [sub_resource type="Gradient" id="Gradient_rain"]

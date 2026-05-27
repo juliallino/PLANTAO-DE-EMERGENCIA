@@ -185,4 +185,4 @@ func _win_game() -> void:
 	SaveManager.save_game()
 	
 	await get_tree().create_timer(2.0).timeout
-	EventBus.transition_started.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")
+	EventBus.cinematic_transition_requested.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")
