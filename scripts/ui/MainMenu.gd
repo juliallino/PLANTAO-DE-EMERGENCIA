@@ -1,6 +1,7 @@
 extends Control
 
 @onready var start_button = $UIIayer/MainContainer/Buttons/StartButton
+@onready var quit_button = $UIIayer/MainContainer/Buttons/QuitButton
 @onready var info_button = $UIIayer/MainContainer/Buttons/InfoButton
 @onready var info_popup = $UIIayer/InfoPopup
 
@@ -9,6 +10,7 @@ func _ready() -> void:
 	
 	# Conectar botões
 	start_button.pressed.connect(_on_start_pressed)
+	quit_button.pressed.connect(_on_quit_pressed)
 	info_button.pressed.connect(_on_info_pressed)
 	
 	# Efeito de hover suave para todos os botões no container
@@ -27,6 +29,10 @@ func _on_start_pressed() -> void:
 
 func _on_info_pressed() -> void:
 	info_popup.popup_centered()
+
+func _on_quit_pressed() -> void:
+	print("Saindo do jogo...")
+	get_tree().quit()
 
 func _on_button_hover(btn: Button) -> void:
 	var tween = create_tween()

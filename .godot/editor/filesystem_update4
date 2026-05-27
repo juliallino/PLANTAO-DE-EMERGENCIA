@@ -1,0 +1,4 @@
+res://scenes/ui/PauseMenu.tscn
+res://scripts/ui/FinalPlantao.gd
+res://scripts/ui/MainMenu.gd
+res://scripts/ui/PauseMenu.gd

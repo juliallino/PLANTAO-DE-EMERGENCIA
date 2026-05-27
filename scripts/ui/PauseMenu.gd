@@ -64,3 +64,6 @@ func _on_continue_pressed() -> void:
 
 func _on_menu_pressed() -> void:
 	UIManager.return_to_main_menu()
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()

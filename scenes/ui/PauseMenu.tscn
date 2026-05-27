@@ -76,7 +76,13 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "VOLTAR AO MENU"
 
+[node name="QuitButton" type="Button" parent="Control/MenuContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "SAIR DO JOGO"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [connection signal="pressed" from="Control/MenuContainer/ContinueButton" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Control/MenuContainer/MenuButton" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Control/MenuContainer/QuitButton" to="." method="_on_quit_pressed"]

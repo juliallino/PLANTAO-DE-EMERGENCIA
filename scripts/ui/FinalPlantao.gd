@@ -5,6 +5,7 @@ extends Control
 @onready var message_label = $UIIayer/CenterContainer/VBoxContainer/Message
 @onready var back_button = $UIIayer/CenterContainer/VBoxContainer/HBoxContainer/BackButton
 @onready var new_shift_button = $UIIayer/CenterContainer/VBoxContainer/HBoxContainer/NewShiftButton
+@onready var quit_button = $UIIayer/CenterContainer/VBoxContainer/HBoxContainer/QuitButton
 
 func _ready() -> void:
 	print("[FinalPlantao] _ready chamado.")
@@ -23,6 +24,12 @@ func _ready() -> void:
 		new_shift_button.pressed.connect(_on_new_shift_pressed)
 	else:
 		print("[FinalPlantao] ERRO: new_shift_button não encontrado!")
+		
+	if quit_button:
+		print("[FinalPlantao] Conectando quit_button.")
+		quit_button.pressed.connect(_on_quit_pressed)
+	else:
+		print("[FinalPlantao] ERRO: quit_button não encontrado!")
 	
 	# Efeitos sonoros de encerramento
 	# AudioManager.play_ambient("res://assets/audio/chuva_suave_fim.ogg")
@@ -55,3 +62,7 @@ func _on_new_shift_pressed() -> void:
 	SaveManager.save_game()
 	GameManager.reset_stats()
 	EventBus.transition_started.emit("res://scenes/phases/Asfixia_Intro.tscn")
+
+func _on_quit_pressed() -> void:
+	print("[FinalPlantao] Botão SAIR DO JOGO pressionado.")
+	get_tree().quit()

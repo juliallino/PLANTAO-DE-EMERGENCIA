@@ -143,6 +143,11 @@ custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
 text = "VOLTAR AO MENU"
 
+[node name="QuitButton" type="Button" parent="UIIayer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=2091088114]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+text = "SAIR DO JOGO"
+
 [node name="StatsContainer" type="Panel" parent="UIIayer" unique_id=81541586]
 anchors_preset = 1
 anchor_left = 1.0
