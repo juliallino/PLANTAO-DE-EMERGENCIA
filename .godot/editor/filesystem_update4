@@ -4,3 +4,4 @@ res://scripts/managers/EventBus.gd
 res://scripts/phases/Hemorragia_Gameplay.gd
 res://scripts/phases/MassagemCardiaca_Gameplay.gd
 res://scripts/phases/Phase_Asfixia_Gameplay.gd
+res://scripts/ui/AmbulanceTransition.gd

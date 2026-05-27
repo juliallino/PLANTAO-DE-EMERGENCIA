@@ -18,14 +18,38 @@ var radio_dialogues = [
 	"Atenção equipe, tempo estimado de chegada: 3 minutos."
 ]
 
+@onready var message_label: Label = $MessageLabel
+
 func _ready() -> void:
+	# Mensagem padrão cinematográfica
+	message_label.text = "A CAMINHO DO PRÓXIMO CHAMADO"
+	message_label.modulate.a = 0
+	
 	# Iniciar efeitos
 	animation_player.play("ambulance_loop")
+	_start_cinematic_effects()
 	_start_radio_chatter()
+
+func _start_cinematic_effects() -> void:
+	# Pulsação lenta da mensagem (legibilidade)
+	var tween = create_tween().set_loops()
+	tween.tween_property(message_label, "modulate:a", 1.0, 1.5).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(message_label, "modulate:a", 0.4, 1.5).set_trans(Tween.TRANS_SINE)
 	
-	# Ajustar luzes para serem aditivas ou overlays
-	siren_red.modulate.a = 0
-	siren_blue.modulate.a = 0
+	# Adicionar flashes mais espaçados para a nova duração
+	_trigger_random_flicker()
+
+func _trigger_random_flicker() -> void:
+	if not is_inside_tree(): return
+	
+	# Menor frequência para não cansar o jogador em 6 segundos
+	if randf() > 0.85:
+		EventBus.sfx_played.emit("res://assets/audio/sfx/electrical_zap.wav")
+		animation_player.play("flicker")
+		await animation_player.animation_finished
+		animation_player.play("ambulance_loop")
+	
+	get_tree().create_timer(randf_range(1.0, 2.0)).timeout.connect(_trigger_random_flicker)
 
 func _start_radio_chatter() -> void:
 	_play_random_radio()

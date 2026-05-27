@@ -80,8 +80,8 @@ func start_cinematic_transition(target_path: String) -> void:
 	if current_ambulance_scene and current_ambulance_scene.has_node("AnimationPlayer"):
 		current_ambulance_scene.get_node("AnimationPlayer").play("monitor_on")
 	
-	# 5. Duração exata de 3 segundos (como pedido)
-	await get_tree().create_timer(3.0).timeout
+	# 5. Duração exata de 6 segundos (para maior imersão e legibilidade)
+	await get_tree().create_timer(6.0).timeout
 	
 	# 6. Garantir que carregou
 	while ResourceLoader.load_threaded_get_status(target_scene_path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
