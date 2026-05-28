@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dtobjlrgek0t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_restart_hover"]
+bg_color = Color(0.4, 0.2, 0, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.6, 0, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 10.0
+expand_margin_top = 5.0
+expand_margin_right = 10.0
+expand_margin_bottom = 5.0
+shadow_color = Color(1, 0.5, 0, 0.2)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_restart_normal"]
+bg_color = Color(0, 0, 0, 0.4)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 10.0
+expand_margin_top = 5.0
+expand_margin_right = 10.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="Theme" id="Theme_restart"]
+Button/font_sizes/font_size = 18
+Button/styles/hover = SubResource("StyleBoxFlat_restart_hover")
+Button/styles/normal = SubResource("StyleBoxFlat_restart_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_restart_hover")
+
+[node name="RestartButton" type="Button" unique_id=4316902]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 920.0
+offset_right = -100.0
+offset_bottom = 950.0
+grow_horizontal = 0
+theme = SubResource("Theme_restart")
+text = "REINICIAR FASE"

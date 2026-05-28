@@ -22,6 +22,7 @@ var is_phase_over: bool = false
 
 func _ready() -> void:
 	EventBus.phase_started.emit("asfixia")
+	EventBus.phase_restart_requested.connect(_on_restart_requested)
 	progress_bar.max_value = required_success
 	progress_bar.value = 0
 	_update_error_ui()
@@ -216,3 +217,9 @@ func _win_game() -> void:
 	
 	await get_tree().create_timer(2.0).timeout
 	EventBus.cinematic_transition_requested.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")
+
+func _on_restart_requested() -> void:
+	if is_phase_over: return
+	is_phase_over = true
+	print("[Phase_Asfixia] Reiniciando fase...")
+	EventBus.transition_started.emit("res://scenes/phases/Asfixia_Intro.tscn")

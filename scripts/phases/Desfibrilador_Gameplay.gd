@@ -28,6 +28,7 @@ var game_active: bool = true
 
 func _ready() -> void:
 	EventBus.phase_started.emit("desfibrilador")
+	EventBus.phase_restart_requested.connect(_on_restart_requested)
 	charge_progress.value = 0
 	$UILayer/TimingSystem.hide()
 	flash_overlay.modulate.a = 0
@@ -166,6 +167,13 @@ func _on_successful_shock() -> void:
 	game_active = false
 	await get_tree().create_timer(3.0).timeout
 	EventBus.transition_started.emit("res://scenes/ui/FinalPlantao.tscn")
+
+func _on_restart_requested() -> void:
+	if not game_active: return
+	game_active = false
+	print("[Desfibrilador] Reiniciando fase...")
+	if phase_audio: phase_audio.stop()
+	EventBus.transition_started.emit("res://scenes/phases/Desfibrilador_Intro.tscn")
 
 func _on_failed_shock() -> void:
 	print("[DEBUG] Choque falhou (timing incorreto).")

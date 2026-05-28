@@ -7,10 +7,24 @@ const AMBULANCE_SCENE_PATH = "res://scenes/phases/AmbulanceTransition.tscn"
 var current_ambulance_scene: Control = null
 var target_scene_path: String = ""
 var is_loading: bool = false
+var skip_transition: bool = false
 
 func _ready() -> void:
 	layer = 128
+	_setup_transition_ui()
 	
+	EventBus.transition_started.connect(start_simple_transition)
+	EventBus.cinematic_transition_requested.connect(start_cinematic_transition)
+	EventBus.story_skip_requested.connect(func(): 
+		print("[TransitionManager] Skip solicitado.")
+		skip_transition = true
+	)
+	EventBus.phase_started.connect(func(_id): 
+		print("[TransitionManager] Nova fase iniciada, resetando flag de skip.")
+		skip_transition = false
+	)
+
+func _setup_transition_ui() -> void:
 	# Configurar ColorRect para o fade global
 	color_rect.color = Color.BLACK
 	color_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -23,9 +37,6 @@ func _ready() -> void:
 	var library = AnimationLibrary.new()
 	animation_player.add_animation_library("", library)
 	_create_fade_animations(library)
-	
-	EventBus.transition_started.connect(start_simple_transition)
-	EventBus.cinematic_transition_requested.connect(start_cinematic_transition)
 
 func _create_fade_animations(library: AnimationLibrary) -> void:
 	var fade_out = Animation.new()
@@ -52,16 +63,19 @@ func start_simple_transition(target_path: String) -> void:
 	
 	get_tree().change_scene_to_file(target_path)
 	
+	# Permitir que novas transições (como um skip imediato) ocorram durante o fade-in
+	is_loading = false
+	
 	animation_player.play("fade_in")
 	await animation_player.animation_finished
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	is_loading = false
 	EventBus.transition_finished.emit()
 
 func start_cinematic_transition(target_path: String) -> void:
 	if is_loading: return
 	is_loading = true
 	target_scene_path = target_path
+	skip_transition = false
 	
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	
@@ -70,7 +84,7 @@ func start_cinematic_transition(target_path: String) -> void:
 	await animation_player.animation_finished
 	
 	# 2. Mostrar Cena da Ambulância
-	_show_ambulance_scene()
+	await _show_ambulance_scene()
 	
 	# 3. Carregamento assíncrono
 	ResourceLoader.load_threaded_request(target_scene_path)
@@ -80,8 +94,17 @@ func start_cinematic_transition(target_path: String) -> void:
 	if current_ambulance_scene and current_ambulance_scene.has_node("AnimationPlayer"):
 		current_ambulance_scene.get_node("AnimationPlayer").play("monitor_on")
 	
-	# 5. Duração exata de 6 segundos (para maior imersão e legibilidade)
-	await get_tree().create_timer(6.0).timeout
+	# 5. Duração de até 6 segundos (pode ser pulada)
+	var timer = 6.0
+	while timer > 0 and not skip_transition:
+		await get_tree().process_frame
+		timer -= get_process_delta_time()
+	
+	if skip_transition:
+		print("[TransitionManager] Transição cinematográfica pulada.")
+		if current_ambulance_scene and current_ambulance_scene.has_method("stop_all"):
+			current_ambulance_scene.stop_all()
+		UIManager.toggle_skip_button(false)
 	
 	# 6. Garantir que carregou
 	while ResourceLoader.load_threaded_get_status(target_scene_path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
@@ -107,12 +130,13 @@ func start_cinematic_transition(target_path: String) -> void:
 	
 	get_tree().change_scene_to_packed(next_scene_resource)
 	
+	is_loading = false
+	
 	# 9. Fade In da Nova Cena
 	animation_player.play("fade_in")
 	await animation_player.animation_finished
 	
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	is_loading = false
 	EventBus.transition_finished.emit()
 
 func _show_ambulance_scene() -> void:

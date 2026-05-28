@@ -8,10 +8,23 @@ var briefing_scene = preload("res://scenes/ui/AsfixiaBriefing.tscn")
 
 func _ready() -> void:
 	EventBus.intro_started.emit("asfixia")
+	EventBus.story_skip_requested.connect(_on_skip_requested)
+	
+	# Se o skip foi solicitado durante a transição anterior, pular imediatamente
+	if TransitionManager.skip_transition:
+		_on_skip_requested()
+	
 	# Iniciar efeitos sonoros
-	# AudioManager.play_ambient("res://assets/audio/chuva_forte.ogg")
-	# AudioManager.play_sfx("res://assets/audio/sirene_ambulancia.wav")
+	# ...
 	pass
+
+func _on_skip_requested() -> void:
+	print("[Asfixia_Intro] História pulada pelo jogador.")
+	if anim_player:
+		anim_player.stop()
+	# Limpeza instantânea de áudio abafado se houver briefing aberto
+	AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, false)
+	_on_briefing_completed()
 
 func update_dialogue(speaker: String, text: String) -> void:
 	dialogue_speaker.text = speaker
@@ -26,6 +39,8 @@ func _type_text(full_text: String) -> void:
 
 func _start_mission() -> void:
 	print("[Asfixia_Intro] Mostrando briefing médico.")
+	if has_node("UILayer/DialogueBox"):
+		$UILayer/DialogueBox.hide()
 	var briefing = briefing_scene.instantiate()
 	add_child(briefing)
 	briefing.briefing_completed.connect(_on_briefing_completed)

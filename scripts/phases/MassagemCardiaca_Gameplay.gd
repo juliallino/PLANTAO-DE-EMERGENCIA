@@ -40,6 +40,7 @@ var decay_rate: float = 4.0 # Velocidade da queda por segundo
 
 func _ready() -> void:
 	EventBus.phase_started.emit("parada_cardiaca")
+	EventBus.phase_restart_requested.connect(_on_restart_requested)
 	rhythm_circles.set_script(load("res://scripts/phases/CircleDrawer.gd")) # Script auxiliar para desenho
 	_update_ui()
 	_start_heartbeat_audio()
@@ -224,4 +225,11 @@ func _lose() -> void:
 	
 	await get_tree().create_timer(4.0).timeout
 	# Voltar para a intro da Parada Cardíaca
+	EventBus.transition_started.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")
+
+func _on_restart_requested() -> void:
+	if not game_active: return
+	game_active = false
+	print("[MassagemCardiaca] Reiniciando fase...")
+	_stop_heartbeat_audio()
 	EventBus.transition_started.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")

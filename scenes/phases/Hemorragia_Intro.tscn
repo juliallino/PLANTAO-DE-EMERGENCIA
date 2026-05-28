@@ -1,9 +1,26 @@
-[gd_scene format=3 uid="uid://b5brw4jtm7jf"]
+[gd_scene format=3 uid="uid://b68uk0v6vo8cc"]
 
 [ext_resource type="Script" uid="uid://cmkmmm6xj2mvh" path="res://scripts/phases/Hemorragia_Intro.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://gfnp7j6072td" path="res://chegando_para_emergencia_3.png" id="2_amb"]
-[ext_resource type="Texture2D" uid="uid://c3k7y0a81g54x" path="res://chegando_para_hemorragia_3.png" id="3_scene"]
+[ext_resource type="Texture2D" uid="uid://gfnp7j6072td" path="res://assets/graphics/ui/chegando_para_emergencia_3.png" id="2_amb"]
+[ext_resource type="Texture2D" uid="uid://c3k7y0a81g54x" path="res://assets/graphics/ui/chegando_para_hemorragia_3.png" id="3_scene"]
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1000, 1, 1)
+direction = Vector3(-0.4, 1, 0)
+spread = 5.0
+initial_velocity_min = 600.0
+initial_velocity_max = 900.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+color = Color(1, 1, 1, 0.4)
+
+[sub_resource type="Environment" id="Environment_intro"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.3
 
 [sub_resource type="Animation" id="Animation_intro"]
 resource_name = "intro_sequence"
@@ -55,46 +72,26 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "values": [{
 "args": ["CENTRAL SAMU", "Unidade 07, temos um acidente com trauma grave. Vítima perdendo muito sangue."],
-"method": "update_dialogue"
+"method": &"update_dialogue"
 }, {
 "args": ["SOCORRISTA", "Entendido, Central. Estamos entrando. A cena está caótica."],
-"method": "update_dialogue"
+"method": &"update_dialogue"
 }, {
 "args": ["SOCORRISTA", "Paciente com múltiplos ferimentos. Perda volêmica visível."],
-"method": "update_dialogue"
+"method": &"update_dialogue"
 }, {
 "args": ["PARCEIRO", "Precisamos conter a hemorragia AGORA ou ele vai entrar em choque!"],
-"method": "update_dialogue"
+"method": &"update_dialogue"
 }, {
 "args": [],
-"method": "_start_mission"
+"method": &"_start_mission"
 }]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_intro"]
 _data = {
-"intro_sequence": SubResource("Animation_intro")
+&"intro_sequence": SubResource("Animation_intro")
 }
-
-[sub_resource type="Environment" id="Environment_intro"]
-background_mode = 3
-glow_enabled = true
-glow_intensity = 0.5
-glow_strength = 1.0
-glow_bloom = 0.3
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rain"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(1000, 1, 1)
-direction = Vector3(-0.4, 1, 0)
-spread = 5.0
-initial_velocity_min = 600.0
-initial_velocity_max = 900.0
-gravity = Vector3(0, 0, 0)
-scale_min = 1.0
-scale_max = 3.0
-color = Color(1, 1, 1, 0.4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialogue"]
 bg_color = Color(0.1, 0, 0, 0.85)
@@ -108,7 +105,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="Hemorragia_Intro" type="Control"]
+[node name="Hemorragia_Intro" type="Control" unique_id=831803936]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,12 +114,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=559644360]
 position = Vector2(960, 540)
 
-[node name="Visuals" type="Node2D" parent="."]
+[node name="Visuals" type="Node2D" parent="." unique_id=604024188]
 
-[node name="AmbulanceView" type="TextureRect" parent="Visuals"]
+[node name="AmbulanceView" type="TextureRect" parent="Visuals" unique_id=939993628]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -134,7 +132,7 @@ texture = ExtResource("2_amb")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SceneView" type="TextureRect" parent="Visuals"]
+[node name="SceneView" type="TextureRect" parent="Visuals" unique_id=1677954078]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -147,47 +145,45 @@ texture = ExtResource("3_scene")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Effects" type="Node2D" parent="."]
+[node name="Effects" type="Node2D" parent="." unique_id=763810682]
 
-[node name="Rain" type="GPUParticles2D" parent="Effects"]
+[node name="Rain" type="GPUParticles2D" parent="Effects" unique_id=181766883]
 position = Vector2(960, -50)
 amount = 300
-process_material = SubResource("ParticleProcessMaterial_rain")
 lifetime = 2.0
 preprocess = 2.0
+process_material = SubResource("ParticleProcessMaterial_rain")
 
-[node name="SirenRed" type="PointLight2D" parent="Effects"]
+[node name="SirenRed" type="PointLight2D" parent="Effects" unique_id=812130753]
 position = Vector2(300, 200)
 color = Color(1, 0, 0, 1)
 energy = 3.0
 texture_scale = 6.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1189931402]
 environment = SubResource("Environment_intro")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_intro")
-}
-autoplay = "intro_sequence"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1883186651]
+libraries/ = SubResource("AnimationLibrary_intro")
+autoplay = &"intro_sequence"
 
-[node name="UILayer" type="CanvasLayer" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1143592521]
 
-[node name="DialogueBox" type="Panel" parent="UILayer"]
+[node name="DialogueBox" type="Panel" parent="UILayer" unique_id=2134015809]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -500.0
-offset_top = -220.0
-offset_right = 500.0
-offset_bottom = -50.0
+offset_left = -429.0
+offset_top = -293.0
+offset_right = 571.0
+offset_bottom = -123.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialogue")
 
-[node name="Speaker" type="Label" parent="UILayer/DialogueBox"]
+[node name="Speaker" type="Label" parent="UILayer/DialogueBox" unique_id=342448056]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 15.0
@@ -197,7 +193,7 @@ theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 28
 text = "RÁDIO SAMU"
 
-[node name="Text" type="Label" parent="UILayer/DialogueBox"]
+[node name="Text" type="Label" parent="UILayer/DialogueBox" unique_id=2144719470]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -212,7 +208,7 @@ theme_override_font_sizes/font_size = 24
 text = "..."
 autowrap_mode = 3
 
-[node name="MissionStatus" type="Control" parent="UILayer"]
+[node name="MissionStatus" type="Control" parent="UILayer" unique_id=1436197589]
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
@@ -223,7 +219,7 @@ offset_right = -50.0
 offset_bottom = 150.0
 grow_horizontal = 0
 
-[node name="PhaseLabel" type="Label" parent="UILayer/MissionStatus"]
+[node name="PhaseLabel" type="Label" parent="UILayer/MissionStatus" unique_id=48913609]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -235,7 +231,7 @@ theme_override_font_sizes/font_size = 32
 text = "FASE: HEMORRAGIA"
 horizontal_alignment = 2
 
-[node name="ProgressText" type="Label" parent="UILayer/MissionStatus"]
+[node name="ProgressText" type="Label" parent="UILayer/MissionStatus" unique_id=205190506]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

@@ -5,6 +5,7 @@ enum GameState {
 	PLAYING,
 	PAUSED,
 	CUTSCENE,
+	TRANSITION,
 	GAME_OVER
 }
 
@@ -22,8 +23,13 @@ func _ready() -> void:
 	EventBus.intro_started.connect(_on_intro_started)
 	EventBus.phase_completed.connect(_on_phase_completed)
 	EventBus.transition_started.connect(_on_transition_started)
+	EventBus.cinematic_transition_requested.connect(_on_cinematic_transition_requested)
 	EventBus.error_reported.connect(_on_error_reported)
 	print("[GameManager] Inicializado e conectado aos sinais.")
+
+func _on_cinematic_transition_requested(_path: String) -> void:
+	print("[GameManager] Transição cinematográfica requisitada, entrando em TRANSITION.")
+	set_state(GameState.TRANSITION)
 
 func reset_stats() -> void:
 	total_errors = 0
@@ -44,18 +50,31 @@ func set_state(new_state: GameState) -> void:
 		GameState.MENU:
 			get_tree().paused = false
 			UIManager.toggle_pause_button(false)
+			UIManager.toggle_skip_button(false)
+			UIManager.toggle_restart_button(false)
 			AudioManager.stop_all_sounds()
 		GameState.PLAYING:
 			get_tree().paused = false
 			UIManager.toggle_pause_button(true)
+			UIManager.toggle_skip_button(false)
+			UIManager.toggle_restart_button(true)
 			AudioManager.resume_gameplay_audio()
 		GameState.PAUSED:
 			get_tree().paused = true
 			UIManager.toggle_pause_button(false)
+			UIManager.toggle_restart_button(false)
 			AudioManager.pause_gameplay_audio()
 		GameState.CUTSCENE:
 			get_tree().paused = false
 			UIManager.toggle_pause_button(true)
+			UIManager.toggle_skip_button(true)
+			UIManager.toggle_restart_button(false)
+			AudioManager.stop_all_sounds()
+		GameState.TRANSITION:
+			get_tree().paused = false
+			UIManager.toggle_pause_button(false)
+			UIManager.toggle_skip_button(false)
+			UIManager.toggle_restart_button(false)
 			# Permitir áudio de transição da ambulância
 			var exceptions = []
 			var transition = get_tree().root.find_child("AmbulanceTransition", true, false)
@@ -66,6 +85,8 @@ func set_state(new_state: GameState) -> void:
 		GameState.GAME_OVER:
 			get_tree().paused = false
 			UIManager.toggle_pause_button(false)
+			UIManager.toggle_skip_button(false)
+			UIManager.toggle_restart_button(false)
 			AudioManager.stop_all_sounds()
 
 func _on_phase_started(_phase_id: String) -> void:

@@ -24,6 +24,7 @@ var game_active: bool = true
 
 func _ready() -> void:
 	EventBus.phase_started.emit("hemorragia")
+	EventBus.phase_restart_requested.connect(_on_restart_requested)
 	_setup_bleeding_points()
 	progress_bar.value = current_stability
 	blood_overlay.modulate.a = 0.3
@@ -230,4 +231,11 @@ func _lose_phase() -> void:
 	
 	await get_tree().create_timer(4.0).timeout
 	# Reiniciar intro da Hemorragia
+	EventBus.transition_started.emit("res://scenes/phases/Hemorragia_Intro.tscn")
+
+func _on_restart_requested() -> void:
+	if not game_active: return
+	game_active = false
+	print("[Hemorragia] Reiniciando fase...")
+	_update_blood_audio(false)
 	EventBus.transition_started.emit("res://scenes/phases/Hemorragia_Intro.tscn")

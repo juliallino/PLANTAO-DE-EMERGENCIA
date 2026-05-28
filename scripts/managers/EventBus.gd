@@ -11,6 +11,7 @@ signal transition_finished
 signal phase_started(phase_id: String)
 signal intro_started(phase_id: String)
 signal phase_completed(phase_id: String, success: bool)
+signal phase_restart_requested
 signal checkpoint_reached(checkpoint_id: String)
 
 # Narrativa
@@ -25,3 +26,6 @@ signal score_updated(new_score: int)
 # Áudio
 signal music_change_requested(track_name: String)
 signal sfx_played(sfx_name: String)
+
+# Narrativa / Skip
+signal story_skip_requested

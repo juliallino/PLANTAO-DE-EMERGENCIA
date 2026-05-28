@@ -8,8 +8,21 @@ var briefing_scene = preload("res://scenes/ui/HemorragiaBriefing.tscn")
 
 func _ready() -> void:
 	EventBus.intro_started.emit("hemorragia")
+	EventBus.story_skip_requested.connect(_on_skip_requested)
+	
+	# Se o skip foi solicitado durante a transição anterior, pular imediatamente
+	if TransitionManager.skip_transition:
+		_on_skip_requested()
+	
 	# Efeitos sonoros de tensão e chuva
 	pass
+
+func _on_skip_requested() -> void:
+	print("[Hemorragia_Intro] História pulada pelo jogador.")
+	if anim_player:
+		anim_player.stop()
+	AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, false)
+	_on_briefing_completed()
 
 func update_dialogue(speaker: String, text: String) -> void:
 	dialogue_speaker.text = speaker
@@ -24,6 +37,8 @@ func _type_text(full_text: String) -> void:
 
 func _start_mission() -> void:
 	print("[Hemorragia_Intro] Mostrando briefing médico (Hemorragia).")
+	if has_node("UILayer/DialogueBox"):
+		$UILayer/DialogueBox.hide()
 	var briefing = briefing_scene.instantiate()
 	add_child(briefing)
 	briefing.briefing_completed.connect(_on_briefing_completed)
