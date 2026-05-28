@@ -11,6 +11,7 @@ extends Node2D
 
 @onready var error_label = $UILayer/ErrorCounter
 @onready var defeat_overlay = $UILayer/DefeatOverlay
+@onready var victory_overlay = $UILayer/VictoryOverlay
 @onready var phase_audio = $PhaseAudio
 
 # Configurações de Gameplay
@@ -153,7 +154,18 @@ func _on_successful_shock() -> void:
 	is_timing_active = false
 	$UILayer/TimingSystem.hide()
 	_apply_shock_effects()
+	
+	# Desaceleração cinematográfica
+	Engine.time_scale = 0.5
+	
 	_show_feedback("CHOQUE APLICADO!", Color.GREEN)
+	
+	# Mostrar Overlay de Vitória
+	if victory_overlay:
+		await victory_overlay.show_victory()
+		
+	# Restaurar tempo
+	Engine.time_scale = 1.0
 	
 	EventBus.phase_completed.emit("desfibrilador", true)
 	SaveManager.game_data["completed_phases"].append("desfibrilador")
@@ -165,7 +177,6 @@ func _on_successful_shock() -> void:
 		tween.finished.connect(func(): phase_audio.stop())
 	
 	game_active = false
-	await get_tree().create_timer(3.0).timeout
 	EventBus.transition_started.emit("res://scenes/ui/FinalPlantao.tscn")
 
 func _on_restart_requested() -> void:

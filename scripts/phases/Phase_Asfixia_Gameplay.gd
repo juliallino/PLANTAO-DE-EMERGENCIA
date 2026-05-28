@@ -5,6 +5,7 @@ extends Node2D
 @onready var progress_bar = $UILayer/ProgressBar
 @onready var error_counter_label = $UILayer/ErrorCounter
 @onready var defeat_overlay = $UILayer/DefeatOverlay
+@onready var victory_overlay = $UILayer/VictoryOverlay
 @onready var spark_particles = $SparkParticles
 @onready var camera = $Camera2D
 @onready var asfixia_audio_player = $AsfixiaAudioPlayer
@@ -201,9 +202,26 @@ func _lose_game() -> void:
 func _win_game() -> void:
 	if is_phase_over: return
 	is_phase_over = true
+	
+	# Desativar interações e esconder guia
+	is_drawing = false
+	player_trail.points = []
+	if has_node("GestureGuide"):
+		$GestureGuide.hide()
+	
+	# Desaceleração cinematográfica
+	Engine.time_scale = 0.5
+	
 	feedback_label.text = "PACIENTE SALVO!"
 	feedback_label.modulate = Color.CYAN
 	feedback_label.modulate.a = 1.0
+	
+	# Mostrar Overlay de Vitória
+	if victory_overlay:
+		await victory_overlay.show_victory()
+	
+	# Restaurar tempo
+	Engine.time_scale = 1.0
 	
 	# Parar áudio com fade out suave
 	if asfixia_audio_player:
@@ -215,7 +233,6 @@ func _win_game() -> void:
 	SaveManager.game_data["completed_phases"].append("asfixia")
 	SaveManager.save_game()
 	
-	await get_tree().create_timer(2.0).timeout
 	EventBus.cinematic_transition_requested.emit("res://scenes/phases/ParadaCardiaca_Intro.tscn")
 
 func _on_restart_requested() -> void:

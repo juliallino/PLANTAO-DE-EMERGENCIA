@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://lxjs5jf7cyqo" path="res://scripts/phases/Phase_Asfixia_Gameplay.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://twko5idg0gbl" path="res://salvando_da_asfixia_0.png" id="2_victim"]
 [ext_resource type="AudioStream" uid="uid://dg35ufrqpsklg" path="res://assets/audios/audio_asfixia.mp3" id="3_audio"]
+[ext_resource type="PackedScene" uid="uid://cvictoryoverlay" path="res://scenes/ui/VictoryOverlay.tscn" id="4_victory"]
 
 [sub_resource type="Curve" id="Curve_trail"]
 _data = [Vector2(0, 0.2), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -183,6 +184,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.862745)
+
+[node name="VictoryOverlay" parent="UILayer" instance=ExtResource("4_victory")]
+visible = false
 
 [node name="Message" type="Label" parent="UILayer/DefeatOverlay" unique_id=29927991]
 layout_mode = 1

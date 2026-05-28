@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ceygfpiuhjcq7" path="res://scripts/phases/Desfibrilador_Gameplay.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dc7qbfhcdy8rt" path="res://desfibrilador_no_paciente_2.png" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://8ny3x5t17hjo" path="res://assets/audios/audio_desfibrilador.mp3" id="3_audio"]
+[ext_resource type="PackedScene" uid="uid://cvictoryoverlay" path="res://scenes/ui/VictoryOverlay.tscn" id="4_victory"]
 
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
@@ -188,6 +189,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.862745)
+
+[node name="VictoryOverlay" parent="UILayer" instance=ExtResource("4_victory")]
+visible = false
 
 [node name="Message" type="Label" parent="UILayer/DefeatOverlay"]
 layout_mode = 1

@@ -8,6 +8,7 @@ extends Node2D
 @onready var monitor_anim = $UILayer/Monitor/MonitorAnim
 @onready var heartbeat_player = $HeartbeatPlayer
 @onready var fx_player = $FXPlayer
+@onready var victory_overlay = $UILayer/VictoryOverlay
 @onready var camera = $Camera2D
 
 # --- Configurações de Ritmo (RCP Real ~110 BPM) ---
@@ -187,15 +188,25 @@ func _check_conditions() -> void:
 func _win() -> void:
 	game_active = false
 	_stop_heartbeat_audio()
+	
+	# Desaceleração cinematográfica
+	Engine.time_scale = 0.5
+	
 	feedback_label.text = "PACIENTE ESTABILIZADO!"
 	feedback_label.modulate = Color.CYAN
 	feedback_label.modulate.a = 1.0
+	
+	# Mostrar Overlay de Vitória
+	if victory_overlay:
+		await victory_overlay.show_victory()
+		
+	# Restaurar tempo
+	Engine.time_scale = 1.0
 	
 	EventBus.phase_completed.emit("parada_cardiaca", true)
 	SaveManager.game_data["completed_phases"].append("parada_cardiaca")
 	SaveManager.save_game()
 	
-	await get_tree().create_timer(2.0).timeout
 	EventBus.cinematic_transition_requested.emit("res://scenes/phases/Hemorragia_Intro.tscn")
 
 func _lose() -> void:

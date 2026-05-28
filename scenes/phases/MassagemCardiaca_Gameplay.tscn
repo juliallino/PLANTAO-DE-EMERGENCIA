@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b7h7fad6xma0m" path="res://assets/graphics/ui/massagem_cardiaca_1.png" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://dgfomtqt5jgvg" path="res://assets/audios/audio_batimento.mp3" id="3_hgsgm"]
 [ext_resource type="Script" uid="uid://in0k80e8fa6j" path="res://scripts/phases/RhythmManager.gd" id="4_rhythm"]
+[ext_resource type="PackedScene" uid="uid://cvictoryoverlay" path="res://scenes/ui/VictoryOverlay.tscn" id="5_victory"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_monitor"]
 bg_color = Color(0, 0.05, 0.05, 0.8)
@@ -218,6 +219,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.862745)
+
+[node name="VictoryOverlay" parent="UILayer" instance=ExtResource("5_victory")]
+visible = false
 
 [node name="Message" type="Label" parent="UILayer/DefeatOverlay" unique_id=1188198767]
 layout_mode = 1

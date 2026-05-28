@@ -5,6 +5,7 @@ extends Node2D
 @onready var camera = $Camera2D
 @onready var blood_overlay = $UILayer/BloodOverlay
 @onready var defeat_overlay = $UILayer/DefeatOverlay
+@onready var victory_overlay = $UILayer/VictoryOverlay
 @onready var status_label = $UILayer/Monitor/Status
 @onready var monitor_panel = $UILayer/Monitor
 @onready var blood_audio_player = $BloodAudioPlayer
@@ -185,15 +186,25 @@ func _win_phase() -> void:
 	game_active = false
 	set_process(false)
 	_update_blood_audio(false)
-	EventBus.phase_completed.emit("hemorragia", true)
-	SaveManager.game_data["completed_phases"].append("hemorragia")
-	SaveManager.save_game()
+	
+	# Desaceleração cinematográfica
+	Engine.time_scale = 0.5
 	
 	feedback_label.text = "SANGRAMENTO ESTANCADO!"
 	feedback_label.modulate = Color.GREEN
 	feedback_label.modulate.a = 1.0
 	
-	await get_tree().create_timer(2.0).timeout
+	# Mostrar Overlay de Vitória
+	if victory_overlay:
+		await victory_overlay.show_victory()
+		
+	# Restaurar tempo
+	Engine.time_scale = 1.0
+	
+	EventBus.phase_completed.emit("hemorragia", true)
+	SaveManager.game_data["completed_phases"].append("hemorragia")
+	SaveManager.save_game()
+	
 	EventBus.cinematic_transition_requested.emit("res://scenes/phases/Desfibrilador_Intro.tscn")
 
 func _lose_phase() -> void:
